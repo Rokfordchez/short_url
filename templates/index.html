@@ -32,10 +32,11 @@
                     action: 'post'
                 },
                 success:function(json){
+                    if (json.short_url.length){
                     document.getElementById("post-form").reset();
                     $(".short_url").empty().first().prepend('Shortened URL: '+
                                 '<a href=\"'+json.short_url+'\">'+json.short_url+'</a>'
-                    )
+                    )}
                 },
                 error : function(xhr,errmsg,err) {
                 $('#results').html("<div class='alert-box alert radius' data-alert>error: "+errmsg+
