@@ -7,7 +7,7 @@
 ```bash
 git clone https://github.com/Rokfordchez/short_url.git
 ```
-виртуальное окружения
+виртуальное окружение
 
 ```bash
 virtualenv -p python3 env
