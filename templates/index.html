@@ -1,68 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-      <head>
-         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-      </head>
-      <body>
-         <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-               <div id="navbar" class="navbar-collapse collapse">
-               </div>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="container pt-5">
+            <form method="POST" id="post-form">
+                {% csrf_token %}
+                <div class="form-group">
+                <label for="exampleInputUrl">URL</label>
+                <input type="text" class="form-control" id="url" placeholder="Url">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <div class="short_url">
+                 <a href="{{short_url}}"> {{short_url}}</a>
             </div>
-         </nav>
-         <!-- Main jumbotron for a primary marketing message or call to action -->
-         <div class="jumbotron">
-            <div class="container">
-               <br/>
-               <div class="row" id="copy">
-                  <div class="col-md-offset-5 col-md-3">
-                     <h4>Enter URL to shorten.</h4>
-                      {% csrf_token %}
-                      <form method="post" id="post-form" class="navbar-form navbar-right" action="">
-                          <div class="form-group">
-                               <input type="text" name="url" id="str-url" class="form-control input-lg chat-input" placeholder="URL" />
-                               <button type="submit" name="urlAdd" id="button_1" class="btn btn-lg btn-info">Submit</button>
-                        </div>
-                      </form>
-                  </div>
-               </div>
-               {% if short_url %}
-               <div>
-                   Shortened URL is: <a href="{{short_url}}"> {{short_url}}</a>
-               </div>
-               {% endif %}
-            </div>
-         </div>
-         </div>
-          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script type="text/javascript">
-    var csrftoken = getCookie('csrftoken');
-    $(document).on('submit', '#post-form', function() {
-        $.ajax(
-        {
-            type:"POST",
-            url: "/",
-            data:{
-                     'url':$('#str-url').val(),
-                     csrfmiddlewaretoken: getCookie('csrftoken')
-            },
-            headers: {'X-CSRFToken': getCookie('csrftoken')},
-         })
-         console.log($(this));
-    console.log( "ready! okay" );
-    });
-    function getCookie(cname) {
-     var name = cname + "=";
-     var ca = document.cookie.split(';');
-     for(var i=0; i<ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1);
-        if(c.indexOf(name) == 0)
-           return c.substring(name.length,c.length);
-     }
-     return "";
-    }
+        </div>
+
+    </body>
+    <script src="/static/js/jquery-2.2.4.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script>
+        $(document).on('submit', '#post-form',function(e){
+            e.preventDefault();
+            $.ajax({
+                type:'POST',
+                url:'{% url "index" %}',
+                data:{
+                    url:$('#url').val(),
+                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                    action: 'post'
+                },
+                success:function(json){
+                    document.getElementById("post-form").reset();
+                    $(".short_url").empty().prepend('Shortened URL: '+
+                                '<a>' + json.short_url + '</a>'
+                    )
+                },
+                error : function(xhr,errmsg,err) {
+                $('#results').html("<div class='alert-box alert radius' data-alert>error: "+errmsg+
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+            });
+        });
     </script>
-      </body>
-   </html>
+</html>
