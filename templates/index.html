@@ -13,7 +13,7 @@
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
             <div class="short_url">
-                 <a href="{{short_url}}"> {{short_url}}</a>
+                 <a href="{{short_url}}">{{short_url}}</a>
             </div>
         </div>
 
@@ -33,8 +33,8 @@
                 },
                 success:function(json){
                     document.getElementById("post-form").reset();
-                    $(".short_url").empty().prepend('Shortened URL: '+
-                                '<a>' + json.short_url + '</a>'
+                    $(".short_url").empty().first().prepend('Shortened URL: '+
+                                '<a href=\"'+json.short_url+'\">'+json.short_url+'</a>'
                     )
                 },
                 error : function(xhr,errmsg,err) {
