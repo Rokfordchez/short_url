@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from surl.views import index
+from django.conf.urls import url
+from surl.views import index, go_to_url
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index),
+    path('', index, name="index"),
+    url(r'^([a-zA-Z0-9_]{4,6})$', go_to_url, name='go'),
 ]
