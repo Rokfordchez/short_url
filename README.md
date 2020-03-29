@@ -12,13 +12,13 @@ git clone https://github.com/Rokfordchez/short_url.git
 ```bash
 virtualenv -p python3 env
 source env/bin/activate
+cd short_url
 pip install -r requirements.txt
 ```
 
 ### Запуск сервера
 Из виртуального окружения:
 ```bash
-cd short_url
 python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver 8000
