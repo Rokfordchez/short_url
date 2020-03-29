@@ -17,18 +17,18 @@ def index(request):
             url = request.POST['url']
         try:
             id = Surl.objects.get(url=url).id
-            response_data['short_url'] = 'http://localhost:8000/' + encode(id)
+            response_data['short_url'] = request.build_absolute_uri() + encode(id)
             return JsonResponse(response_data)
         except Surl.DoesNotExist:
             try:
                 r = requests.get(url, timeout=3)
-            except requests.exceptions.ConnectTimeout:
+            except (requests.exceptions.ConnectTimeout, requests.exceptions.ConnectionError) as e:
                 response_data['message'] = 'incorrect url'
                 return JsonResponse(response_data)
             if r.status_code == 200:
                 surl = Surl(url=url)
                 surl.save()
-                response_data['short_url'] = 'http://localhost:8000/' + encode(surl.id)
+                response_data['short_url'] = request.build_absolute_uri() + encode(surl.id)
                 return JsonResponse(response_data)
             else:
                 response_data['message'] = 'incorrect url'

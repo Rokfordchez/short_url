@@ -12,7 +12,7 @@ git clone https://github.com/Rokfordchez/short_url.git
 ```bash
 virtualenv -p python3 env
 source env/bin/activate
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 ### Запуск сервера
