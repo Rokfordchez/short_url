@@ -32,11 +32,20 @@
                     action: 'post'
                 },
                 success:function(json){
-                    if (json.short_url.length){
+                    if (typeof json.short_url !== 'undefined' && json.short_url.length>0){
                     document.getElementById("post-form").reset();
                     $(".short_url").empty().first().prepend('Shortened URL: '+
                                 '<a href=\"'+json.short_url+'\">'+json.short_url+'</a>'
                     )}
+                    else if(typeof json.message !== 'undefined' && json.message.length>0) {
+                    document.getElementById("post-form").reset();
+                    console.log('wrong url');
+                    $(".short_url").empty().first().prepend(json.message
+                    )}
+                    else {
+                    document.getElementById("post-form").reset();
+                    $(".short_url").empty()
+                    }
                 },
                 error : function(xhr,errmsg,err) {
                 $('#results').html("<div class='alert-box alert radius' data-alert>error: "+errmsg+
